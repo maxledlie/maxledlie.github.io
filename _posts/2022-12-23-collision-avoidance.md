@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Collision Avoidance with ORCA'
-use_math: false
+use_math: true
 ---
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -22,6 +22,9 @@ Avoiding collision for all time is a daunting task. Instead, let's pick some win
 
 To make things as simple as possible, first suppose there are just two agents, $A$ and $B$. $B$ is just sitting still for now, and $A$ wants to know which velocities it can take. The authors use the concept of a *velocity obstacle* $VO^{\tau}_{A\|B}$. This is the set of velocities that $A$ can use that *will* result in a collision with $B$ within the time window $\tau$.
 
-<div id='velocityObstacleDemo'>
+<div style='display: flex; width: 100%; height: 500px'>
+  <div id='velocitySpace' style='flex: 1; padding-right: 5px;'></div>
+  <div id='positionSpace' style='flex: 1; padding-left: 5px;'></div>
 </div>
+
 <script src="{{ base.url | prepend: site.url }}/assets/js/velocityObstacle.js">
