@@ -26,30 +26,31 @@ grad.append('stop')
   .attr('stop-color', '#9999ff')
   .attr('stop-opacity', '0%');
 
-let selectedLine = null;
-let selectedRect = null;
-let selectedPerp = null;
+let currentLine = null;
+let currentRect = null;
+let currentPerp = null;
 let dragStart = null;
+const halfPlanePerps = [];
 
 canvas.svg.on('mousedown', e => {
   e.stopPropagation();
 
   const p1 = [canvas.xScale.invert(e.offsetX), canvas.yScale.invert(e.offsetY)];
 
-  selectedRect = canvas.svg.append('rect')
+  currentRect = canvas.svg.append('rect')
   .attr('x', 0)
   .attr('y', 0)
   .attr('width', 0)
   .attr('height', 0);
-  selectedLine = canvas.line(p1, p1, {'stroke': 'black', 'stroke-width': 3});
-  selectedPerp = canvas.line(p1, p1, {'stroke': 'red', 'stroke-width': 2});
+  currentLine = canvas.line(p1, p1, {'stroke': 'black', 'stroke-width': 3});
+  currentPerp = canvas.line(p1, p1, {'stroke': 'red', 'stroke-width': 2});
   dragStart = p1;
 });
 
 canvas.svg.on('mousemove', e => {
-  if (selectedLine === null) return;
+  if (currentLine === null) return;
   
-  selectedPerp
+  currentPerp
     .attr('x2', e.offsetX)
     .attr('y2', e.offsetY);
 
@@ -68,7 +69,7 @@ canvas.svg.on('mousemove', e => {
 
   // Special case for vertical line
   if (selectedLineVec[0] === 0) {
-    selectedLine
+    currentLine
       .attr('x1', canvas.xScale(dragStart[0]))
       .attr('y1', canvas.yScale(DOMAIN[0] - 10))
       .attr('x2', canvas.xScale(dragStart[0]))
@@ -85,7 +86,7 @@ canvas.svg.on('mousemove', e => {
   const lineEndX = DOMAIN[1] + 10;
   const lineEnd = [lineEndX, dragStart[1] - selectedLineGrad * (dragStart[0] - lineEndX)];
 
-  selectedLine
+  currentLine
     .attr('x1', canvas.xScale(lineStart[0]))
     .attr('y1', canvas.yScale(lineStart[1]))
     .attr('x2', canvas.xScale(lineEnd[0]))
@@ -96,7 +97,7 @@ canvas.svg.on('mousemove', e => {
   console.log(`theta: ${theta}`);
   console.log(`grad: ${selectedPerpGrad}`);
 
-  selectedRect
+  currentRect
     .attr('width', 2 * GRADIENT_THICKNESS)
     .attr('height', canvas.yDeltaScale(1000))
     .attr('x', canvas.xScale(dragStart[0]) - GRADIENT_THICKNESS)
@@ -106,8 +107,8 @@ canvas.svg.on('mousemove', e => {
 });
 
 canvas.svg.on('mouseup', e => {
-  selectedPerp.remove();
-  selectedPerp = null;
-  selectedLine = null;
-  selectedRect = null;
+  currentPerp.remove();
+  currentPerp = null;
+  currentLine = null;
+  currentRect = null;
 });
