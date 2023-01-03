@@ -1,7 +1,8 @@
+import GeometryCanvas from "./GeometryCanvas.js";
+
 // Constants
 const TAU = 2;
 const WAIT = 1;
-const AXIS_PADDING = 30;
 
 // Data
 let pointA = [0, 0];
@@ -12,56 +13,8 @@ const radiusB = 8;
 
 const vb = [-30, -50];
 
-function defineAxes(container, svg, targetDomain) {
-  const size = container.node().getBoundingClientRect();
-
-  const isPortrait = size.height > size.width;
-  const aspectRatio = (size.width - 2 * AXIS_PADDING) / (size.height - 2 * AXIS_PADDING);
-  
-  const truncateFactorX = isPortrait ? aspectRatio : 1;
-  const x = d3.scaleLinear()
-    .domain([truncateFactorX * targetDomain[0], truncateFactorX * targetDomain[1]])
-    .range([AXIS_PADDING, size.width - AXIS_PADDING]);
-  
-  const truncateFactorY = isPortrait ? 1 : aspectRatio;
-  const y = d3.scaleLinear()
-    .domain([truncateFactorY * targetDomain[0], truncateFactorY * targetDomain[1]])
-    .range([size.height - AXIS_PADDING, AXIS_PADDING]);
-
-  const xDelta = d3.scaleLinear()
-    .domain([0, 1])
-    .range([0, x(1) - x(0)]);
-
-  const yDelta = d3.scaleLinear()
-    .domain([0, 1])
-    .range([0, y(1) - y(0)]);
-
-  const axisLeft = d3.axisLeft(y);
-  const axisBottom = d3.axisBottom(x);
-
-  const yAxis = svg.append('g')
-    .attr('transform', `translate(${x(0)}, 0)`);
-
-  const xAxis = svg.append('g')
-    .attr('transform', `translate(0, ${y(0)})`);
-  
-  yAxis.call(axisLeft);
-  xAxis.call(axisBottom);
-  
-  return [x, y, xDelta, yDelta];
-}
-
-const positionContainer = d3.select('#positionSpace');
-const positionSvg = positionContainer.append('svg')
-  .attr('width', '100%')
-  .attr('height', '100%');
-const [xPos, yPos, xDeltaPos, yDeltaPos] = defineAxes(positionContainer, positionSvg, [-50, 100]);
-
-const velocityContainer = d3.select('#velocitySpace');
-const velocitySvg = velocityContainer.append('svg')
-  .attr('width', '100%')
-  .attr('height', '100%');
-const [xVel, yVel, xDeltaVel, yDeltaVel] = defineAxes(velocityContainer, velocitySvg, [-50, 50]);
+const cVel = new GeometryCanvas('#velocitySpace', [-50, 50]);
+const cPos = new GeometryCanvas('#positionSpace', [-50, 100]);
 
 // Draw the velocity obstacle
 const relPosX = pointB[0] - pointA[0];
@@ -77,8 +30,8 @@ const c = combinedRadiusSq - relPosY * relPosY;
 const disc = b * b - 4 * a * c;
 
 if (disc >= 0) {
-  const voGroup = velocitySvg.append('g')
-    .attr('transform', `translate(${xDeltaVel(vb[0])}, ${yDeltaVel(vb[1])})`)
+  const voGroup = cVel.svg.append('g')
+    .attr('transform', `translate(${cVel.xDeltaScale(vb[0])}, ${cVel.yDeltaScale(vb[1])})`)
 
   const m1 = (-b - Math.sqrt(disc)) / (2 * a);
   let alpha = 1 + m1 * m1;
@@ -92,13 +45,13 @@ if (disc >= 0) {
   const anchor2X = -beta / (2 * alpha * TAU);
   const anchor2Y = m2 * anchor2X;
 
-  const circleRadius = xDeltaVel(combinedRadius / TAU);
+  const circleRadius = cVel.xDeltaScale(combinedRadius / TAU);
 
   voGroup.append('path')
-    .attr('d', `M ${xVel(anchor1X)} ${yVel(anchor1Y)}
-      A ${circleRadius} ${circleRadius} 0 0 0 ${xVel(anchor2X)} ${yVel(anchor2Y)}
-      L ${xVel(100)} ${yVel(m2 * 100)}
-      L ${xVel(100)} ${yVel(m1 * 100)}
+    .attr('d', `M ${cVel.xScale(anchor1X)} ${cVel.yScale(anchor1Y)}
+      A ${circleRadius} ${circleRadius} 0 0 0 ${cVel.xScale(anchor2X)} ${cVel.yScale(anchor2Y)}
+      L ${cVel.xScale(100)} ${cVel.yScale(m2 * 100)}
+      L ${cVel.xScale(100)} ${cVel.yScale(m1 * 100)}
       Z`)
     .style('stroke', '#333333')
     .style('stroke-width', 2)
@@ -107,21 +60,21 @@ if (disc >= 0) {
 }
 
 // Mark the velocity of agent B
-velocitySvg.append('circle')
-  .attr('cx', xVel(vb[0]))
-  .attr('cy', yVel(vb[1]))
+cVel.svg.append('circle')
+  .attr('cx', cVel.xScale(vb[0]))
+  .attr('cy', cVel.yScale(vb[1]))
   .attr('r', 3)
   .style('fill', '#ff9999');
 
-const g = positionSvg.append('g');
+const g = cPos.svg.append('g');
 drawAgents();
 
-velocitySvg.on('click', function(event) {
+cVel.svg.on('click', function(event) {
   const agentA = g.select('#agentA');
   const agentB = g.select('#agentB');
 
-  const velX = xVel.invert(event.offsetX);
-  const velY = yVel.invert(event.offsetY);
+  const velX = cVel.xScale.invert(event.offsetX);
+  const velY = cVel.yScale.invert(event.offsetY);
 
   const finalPosA = [pointA[0] + TAU * velX, pointA[1] + TAU * velY];
   const finalPosB = [pointB[0] + TAU * vb[0], pointB[1] + TAU * vb[1]];
@@ -132,8 +85,8 @@ velocitySvg.on('click', function(event) {
   agentA.transition('move')
     .duration(TAU * 1000)
     .ease(d3.easeLinear)
-    .attr('cx', xPos(finalPosA[0]))
-    .attr('cy', yPos(finalPosA[1]))
+    .attr('cx', cPos.xScale(finalPosA[0]))
+    .attr('cy', cPos.yScale(finalPosA[1]))
     .on('end', () => {
       agentA.transition('wait')
         .duration(WAIT * 1000)
@@ -145,8 +98,8 @@ velocitySvg.on('click', function(event) {
   agentB.transition('move')
     .duration(TAU * 1000)
     .ease(d3.easeLinear)
-    .attr('cx', xPos(finalPosB[0]))
-    .attr('cy', yPos(finalPosB[1]))
+    .attr('cx', cPos.xScale(finalPosB[0]))
+    .attr('cy', cPos.yScale(finalPosB[1]))
     .on('end', () => {
       agentB.transition('wait')
         .duration(WAIT * 1000)
@@ -158,12 +111,12 @@ velocitySvg.on('click', function(event) {
 
 function reset() {
   g.select('#agentA')
-    .attr('cx', xPos(pointA[0]))
-    .attr('cy', yPos(pointA[1]))
+    .attr('cx', cPos.xScale(pointA[0]))
+    .attr('cy', cPos.yScale(pointA[1]))
 
   g.select('#agentB')
-    .attr('cx', xPos(pointB[0]))
-    .attr('cy', yPos(pointB[1]));
+    .attr('cx', cPos.xScale(pointB[0]))
+    .attr('cy', cPos.yScale(pointB[1]));
 }
 
 function drawAgents() {
@@ -172,18 +125,18 @@ function drawAgents() {
   // Draw circles
   g.append('circle')
     .attr('id', 'agentA')
-    .attr('cx', xPos(pointA[0]))
-    .attr('cy', yPos(pointA[1]))
-    .attr('r', xDeltaPos(radiusA))
+    .attr('cx', cPos.xScale(pointA[0]))
+    .attr('cy', cPos.yScale(pointA[1]))
+    .attr('r', cPos.xDeltaScale(radiusA))
     .style('fill', '#9999ff')
     .style('stroke', '#000066')
     .style('stroke-width', 2);
 
   g.append('circle')
     .attr('id', 'agentB')
-    .attr('cx', xPos(pointB[0]))
-    .attr('cy', yPos(pointB[1]))
-    .attr('r', xDeltaPos(radiusB))
+    .attr('cx', cPos.xScale(pointB[0]))
+    .attr('cy', cPos.yScale(pointB[1]))
+    .attr('r', cPos.xDeltaScale(radiusB))
     .style('fill', '#ff9999')
     .style('stroke', '#800000')
     .style('stroke-width', 2);

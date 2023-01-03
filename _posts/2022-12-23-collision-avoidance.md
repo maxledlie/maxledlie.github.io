@@ -40,6 +40,4 @@ In the next interactive, an annotation shows the set $V_B$ in velocity space. Wh
   <div id='positionSpace2' style='flex: 1; padding-left: 5px;'></div>
 </div>
 
-
-
-<script src="{{ base.url | prepend: site.url }}/assets/js/velocityObstacle.js">
+<script type='module' src="{{ base.url | prepend: site.url }}/assets/js/velocityObstacle.js">
