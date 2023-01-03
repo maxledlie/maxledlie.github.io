@@ -1,4 +1,5 @@
 import GeometryCanvas from './GeometryCanvas.js';
+import Vector2 from './Vector2.js';
 
 const DOMAIN = [0, 100];
 const GRADIENT_THICKNESS = 20;
@@ -30,21 +31,19 @@ let currentLine = null;
 let currentRect = null;
 let currentPerp = null;
 let dragStart = null;
-const halfPlanePerps = [];
 
 canvas.svg.on('mousedown', e => {
   e.stopPropagation();
 
-  const p1 = [canvas.xScale.invert(e.offsetX), canvas.yScale.invert(e.offsetY)];
+  dragStart = new Vector2(canvas.xScale.invert(e.offsetX), canvas.yScale.invert(e.offsetY));
 
   currentRect = canvas.svg.append('rect')
-  .attr('x', 0)
-  .attr('y', 0)
-  .attr('width', 0)
-  .attr('height', 0);
-  currentLine = canvas.line(p1, p1, {'stroke': 'black', 'stroke-width': 3});
-  currentPerp = canvas.line(p1, p1, {'stroke': 'red', 'stroke-width': 2});
-  dragStart = p1;
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('width', 0)
+    .attr('height', 0);
+  currentLine = canvas.line(dragStart, dragStart, {'stroke': 'black', 'stroke-width': 3});
+  currentPerp = canvas.line(dragStart, dragStart, {'stroke': 'red', 'stroke-width': 2});
 });
 
 canvas.svg.on('mousemove', e => {
@@ -55,54 +54,50 @@ canvas.svg.on('mousemove', e => {
     .attr('y2', e.offsetY);
 
   // Find and draw the line perpendicular to selectedPerp
-  const selectedPerpVec = [
-    canvas.xScale.invert(e.offsetX) - dragStart[0],
-    canvas.yScale.invert(e.offsetY) - dragStart[1]
-  ];
+  const currentPerpVec = new Vector2(
+    canvas.xScale.invert(e.offsetX) - dragStart.x,
+    canvas.yScale.invert(e.offsetY) - dragStart.y
+  );
 
-  if (selectedPerpVec === 0 && selectedLineVec === 0) return;
-
-  const selectedLineVec = [
-    selectedPerpVec[1],
-    -selectedPerpVec[0]
-  ];
+  const currentLineVec = new Vector2(
+    currentPerpVec.y,
+    -currentPerpVec.x
+  );
 
   // Special case for vertical line
-  if (selectedLineVec[0] === 0) {
+  if (currentLineVec.x === 0) {
     currentLine
-      .attr('x1', canvas.xScale(dragStart[0]))
+      .attr('x1', canvas.xScale(dragStart.x))
       .attr('y1', canvas.yScale(DOMAIN[0] - 10))
-      .attr('x2', canvas.xScale(dragStart[0]))
+      .attr('x2', canvas.xScale(dragStart.x))
       .attr('y2', canvas.yScale(DOMAIN[1] + 10));
 
     return;
   }
 
-  const selectedPerpGrad = selectedPerpVec[1] / selectedPerpVec[0];
-  const selectedLineGrad = selectedLineVec[1] / selectedLineVec[0];
+  const selectedLineGrad = currentLineVec.y / currentLineVec.x;
   const lineStartX = DOMAIN[0] - 10;
-  const lineStartY = dragStart[1] - selectedLineGrad * (dragStart[0] - lineStartX);
-  const lineStart = [lineStartX, lineStartY];
+  const lineStartY = dragStart.y - selectedLineGrad * (dragStart.x - lineStartX);
+  const lineStart = new Vector2(lineStartX, lineStartY);
   const lineEndX = DOMAIN[1] + 10;
-  const lineEnd = [lineEndX, dragStart[1] - selectedLineGrad * (dragStart[0] - lineEndX)];
+  const lineEnd = new Vector2(lineEndX, dragStart.y - selectedLineGrad * (dragStart.x - lineEndX));
+
+  console.log(`selectedLineGrad: ${selectedLineGrad}`);
 
   currentLine
-    .attr('x1', canvas.xScale(lineStart[0]))
-    .attr('y1', canvas.yScale(lineStart[1]))
-    .attr('x2', canvas.xScale(lineEnd[0]))
-    .attr('y2', canvas.yScale(lineEnd[1]));
+    .attr('x1', canvas.xScale(lineStart.x))
+    .attr('y1', canvas.yScale(lineStart.y))
+    .attr('x2', canvas.xScale(lineEnd.x))
+    .attr('y2', canvas.yScale(lineEnd.y));
 
-  const theta = 180 * Math.atan2(selectedPerpVec[1], selectedPerpVec[0]) / Math.PI;
-
-  console.log(`theta: ${theta}`);
-  console.log(`grad: ${selectedPerpGrad}`);
+  const theta = 180 * Math.atan2(currentPerpVec.y, currentPerpVec.x) / Math.PI;
 
   currentRect
     .attr('width', 2 * GRADIENT_THICKNESS)
     .attr('height', canvas.yDeltaScale(1000))
-    .attr('x', canvas.xScale(dragStart[0]) - GRADIENT_THICKNESS)
-    .attr('y', canvas.yScale(dragStart[1] + 200))
-    .attr('transform', `rotate(${-theta}, ${canvas.xScale(dragStart[0])}, ${canvas.yScale(dragStart[1])})`)
+    .attr('x', canvas.xScale(dragStart.x) - GRADIENT_THICKNESS)
+    .attr('y', canvas.yScale(dragStart.y + 200))
+    .attr('transform', `rotate(${-theta}, ${canvas.xScale(dragStart.x)}, ${canvas.yScale(dragStart.y)})`)
     .style('fill', 'url(#myGrad)');
 });
 

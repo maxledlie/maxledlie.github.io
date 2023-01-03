@@ -52,10 +52,10 @@ export default class GeometryCanvas {
 
   line(p1, p2, style) {
     const line = this.g.append('line')
-      .attr('x1', this.xScale(p1[0]))
-      .attr('y1', this.yScale(p1[1]))
-      .attr('x2', this.xScale(p2[0]))
-      .attr('y2', this.yScale(p2[1]));
+      .attr('x1', this.xScale(p1.x))
+      .attr('y1', this.yScale(p1.y))
+      .attr('x2', this.xScale(p2.x))
+      .attr('y2', this.yScale(p2.y));
 
     for (const prop in style) {
       line.style(prop, style[prop]);
