@@ -22,7 +22,7 @@ export default class Matrix2 {
 
   // Returns the inverse of the matrix, or null if the matrix is not invertible
   invert() {
-    const det = (this.arr[1][1] * this.arr[0][0] - this.arr[0][1] * this.arr[1][0]);
+    const det = this.det();
     
     if (det === 0) {
       return null;
@@ -34,5 +34,9 @@ export default class Matrix2 {
     ]);
 
     return mat.scale(1 / det);
+  }
+
+  det() {
+    return this.arr[1][1] * this.arr[0][0] - this.arr[0][1] * this.arr[1][0];
   }
 }
