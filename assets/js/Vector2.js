@@ -29,4 +29,16 @@ export default class Vector2 {
     if (mag === 0) return new Vector2(0, 0);
     return this.div(mag);
   }
+
+  equals(other, eps = 0) {
+    return Math.abs(this.x - other.x) <= eps && Math.abs(this.y - other.y) <= eps;
+  }
+
+  neg() {
+    return new Vector2(-this.x, -this.y);
+  }
+
+  dot(other) {
+    return this.x * other.x + this.y * other.y;
+  }
 }
