@@ -5,6 +5,6 @@ Low clouds made for poor views from the summits. Some ice patches were still han
 
 The original plan was to climb two further munros on the way home on Sunday, but storms rolled in so we enjoyed a lie-in instead before the drive.
 
-<img src="/assets/images/cairn-gorm-summit.jpg"/>
-<img src="/assets/images/ben-macdui-summit.jpg"/>
-<img src="/assets/images/derry-cairngorm-summit.jpg"/>
+<img src="/assets/images/cairn-gorm-summit.jpg" style="margin: 10px"/>
+<img src="/assets/images/ben-macdui-summit.jpg" style="margin: 10px"/>
+<img src="/assets/images/derry-cairngorm-summit.jpg" style="margin: 10px"/>
