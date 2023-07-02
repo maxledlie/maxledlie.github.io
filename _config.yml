@@ -20,7 +20,7 @@
 
 title: Max Ledlie
 description: >- # this means to ignore newlines until "baseurl:"
-  Posts on physics, maths and software engineering.
+  Personal web page.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://maxledlie.com" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  maxledlie
