@@ -26,4 +26,3 @@ P.S. Sorry if photos don't fit on screen, too tired to fix now.
 <img src="/assets/images/2023-10-12-new-york-remainder/nyc_09.jpg" style="margin: 10px" />
 <img src="/assets/images/2023-10-12-new-york-remainder/nyc_10.jpg" style="margin: 10px" />
 <img src="/assets/images/2023-10-12-new-york-remainder/nyc_11.jpg" style="margin: 10px" />
-<img src="/assets/images/2023-10-12-new-york-remainder/nyc_12.jpg" style="margin: 10px" />
