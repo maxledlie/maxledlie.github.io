@@ -13,7 +13,9 @@ Highlights included:
 - A relaxing day on Rockaway Beach
 - Amazing views and insanely strong cocktails at Summit One to say goodbye to the city
 
-<img src="/assets/images/2023-10-12-new-york-remainder/nyc_01.jpg" style="margin: 10px" />
+P.S. Sorry if photos don't fit on screen, too tired to fix now.
+
+<img src="/assets/images/2023-10-12-new-york-remainder/nyc_01.jpg" style="margin: 10px; max-height: 80%"/>
 <img src="/assets/images/2023-10-12-new-york-remainder/nyc_02.jpg" style="margin: 10px" />
 <img src="/assets/images/2023-10-12-new-york-remainder/nyc_03.jpg" style="margin: 10px" />
 <img src="/assets/images/2023-10-12-new-york-remainder/nyc_04.jpg" style="margin: 10px" />
