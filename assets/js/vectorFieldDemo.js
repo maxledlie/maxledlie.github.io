@@ -8,10 +8,20 @@ const NCELLS = 50;
 const GRID_SPEC = {
     NX: 25,
     NY: 25,
-    X_MIN: -10,
-    X_MAX: 10,
-    Y_MIN: -10,
-    Y_MAX: 10
+    X_MIN: -1,
+    X_MAX: 1,
+    Y_MIN: -1,
+    Y_MAX: 1
+}
+
+const FUNCS = {
+    source: (x, y) => [x, y],
+    sink: (x, y) => [-x, -y],
+    orbit: (x, y) => [-y, x],
+    bias: (x, y) => [x, 0.5],
+    periodic: (x, y) => [Math.cos(2 * Math.PI * x), Math.sin(2 * Math.PI * y)],
+    cyclical: (x, y) => [Math.cos(-2 * Math.PI * y), Math.sin(2 * Math.PI * x)],
+    vortices: (x, y) => [Math.cos(2 * Math.PI * (x + y)), Math.sin(2 * Math.PI * (x - y))]
 }
 
 
@@ -43,7 +53,7 @@ function evaluate(func, grid) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    const func = (x, y) => [x + y, x - y];
+    const func = FUNCS.vortices;
 
     const grid = initGrid(GRID_SPEC);
     const data = evaluate(func, grid)
