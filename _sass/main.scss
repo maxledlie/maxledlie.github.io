@@ -1,3 +1,58 @@
+html {
+    line-height: 1.5;
+}
+
+body {
+    background-color: #d6d6d6;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+main {
+    margin: 0 max(1ch, calc((100vw - 72ch) / 2));
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.site-header {
+    border-bottom: 1px solid #e8e8e8;
+    line-height: 48px;
+}
+
+.site-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.page-link {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
 .current {
-    color: green;
+    color: "green";
+}
+
+img {
+    max-width: 100%;
+    vertical-align: middle;
+    overflow: clip;
+    border-radius: 2%; 
+}
+
+
+/* Blog specific */
+
+.post-list {
+    margin-left: 0;
+    list-style: none;
+}
+
+.post-meta {
+    font-size: 14px;
+    color: #828282;
 }
