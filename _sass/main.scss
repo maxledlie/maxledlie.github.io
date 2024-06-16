@@ -8,12 +8,11 @@ body {
 }
 
 main {
-    margin: 0 max(1ch, calc((100vw - 72ch) / 2));
+    margin: 0 max(1ch, calc((100vw - 66ch) / 2));
 }
 
 a {
     text-decoration: none;
-    color: inherit;
 }
 
 .site-header {
