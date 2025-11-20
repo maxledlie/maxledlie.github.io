@@ -9,7 +9,7 @@ I'm currently attending [The Recurse Center](https://www.recurse.com/): a 12 wee
 
 Over ten years of programming I've accumulated many small side projects. I'm now trying to curate these here.
 
-### [Raymond](http://www.raymond.maxledlie.com) (Ongoing)
+### [Raymond](https://raymond.maxledlie.com) (Ongoing)
 
 A 2D toy I'm developing to help me understand and explain 3D ray tracing. Desktop only.
 
