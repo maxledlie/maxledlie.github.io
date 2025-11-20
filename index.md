@@ -9,6 +9,10 @@ I'm currently attending [The Recurse Center](https://www.recurse.com/): a 12 wee
 
 Over ten years of programming I've accumulated many small side projects. I'm now trying to curate these here.
 
+### [Raymond](http://www.raymond.maxledlie.com) (Ongoing)
+
+A 2D toy I'm developing to help me understand and explain 3D ray tracing. Desktop only.
+
 ### [Asteroids Clone](/asteroids) (Jan 2022)
 
 To learn the basics of game development with Unity, I created this slightly remixed version of the classic arcade game.
