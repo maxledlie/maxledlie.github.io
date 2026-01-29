@@ -3,15 +3,17 @@ layout: default
 title: Home
 ---
 
-I'm currently attending [The Recurse Center](https://www.recurse.com/): a 12 week self-directed programming retreat.
+I'm Max, a Python and TypeScript engineer with ten years' experience and a Master's degree in physics. I specialise in turning complex scientific ideas into production software.
 
-## Projects
+## Personal Projects
 
-Over ten years of programming I've accumulated many small side projects. I'm now trying to curate these here.
+Outside of work, I enjoy making small games and interactive explainers of interesting topics. I'm gradually curating these here.
 
-### [Raymond](https://raymond.maxledlie.com) (Ongoing)
+### [Raymond](https://raymond.maxledlie.com) (Nov 2025)
 
-A 2D toy I'm developing to help me understand and explain 3D ray tracing. Desktop only.
+During a career break at the [Recurse Center](https://www.recurse.com/), I built an interactive 2D ray tracer for learning and teaching about graphics. Watch the demo below and [try it out](https://raymond.maxledlie.com/).
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/WYTOykSqf2Y?si=mdmCa4K3L8UmNt47" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ### [Asteroids Clone](/asteroids) (Jan 2022)
 
